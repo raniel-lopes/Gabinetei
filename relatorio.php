@@ -1,3 +1,26 @@
+<?php
+// Conectar ao banco de dados
+include('config.php');
+
+// Consulta para pegar os dados dos eleitores e calcular a idade
+$query = "SELECT nome, YEAR(CURDATE()) - YEAR(data_nascimento) AS idade, sexo FROM eleitores";
+$result = mysqli_query($conn, $query);
+
+// Contagem de homens e mulheres para o gráfico
+$query_sex = "SELECT sexo, COUNT(*) as count FROM eleitores GROUP BY sexo";
+$sex_result = mysqli_query($conn, $query_sex);
+$sex_data = [
+    'Masculino' => 0,
+    'Feminino' => 0
+];
+
+// Preenchendo a contagem de sexo
+while ($row = mysqli_fetch_assoc($sex_result)) {
+    $sex_data[$row['sexo']] = $row['count'];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -25,17 +48,13 @@
                 </thead>
                 <tbody>
                     <!-- Dados dos eleitores -->
-                    <!-- Exemplo de linha -->
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
                     <tr>
-                        <td>João Silva</td>
-                        <td>35</td>
-                        <td>Masculino</td>
+                        <td><?php echo $row['nome']; ?></td>
+                        <td><?php echo $row['idade']; ?></td>
+                        <td><?php echo $row['sexo']; ?></td>
                     </tr>
-                    <tr>
-                        <td>Ana Costa</td>
-                        <td>28</td>
-                        <td>Feminino</td>
-                    </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
@@ -49,7 +68,7 @@
             data: {
                 labels: ['Homens', 'Mulheres'],
                 datasets: [{
-                    data: [50, 50], // Substitua com os dados do banco
+                    data: [<?php echo $sex_data['Masculino']; ?>, <?php echo $sex_data['Feminino']; ?>], // Dados dinâmicos
                     backgroundColor: ['#36a2eb', '#ff6384']
                 }]
             }
