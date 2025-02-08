@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Cadastro de Eleitor</h1>
-        <form id="cadastroForm" action="processa_cadastro.php" method="POST">
+        <form id="cadastroForm" action="auth/processsa_cadastro.php" method="POST">
             <div class="form-group">
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" required>
