@@ -10,11 +10,14 @@ $usuarios = [
 $usuario = $_POST['usuario'] ?? '';
 $senha = $_POST['senha'] ?? '';
 
+// Verifica se o usuário existe e a senha está correta
 if (isset($usuarios[$usuario]) && $usuarios[$usuario] === $senha) {
     $_SESSION['usuario'] = $usuario;
-    header("Location: pages/dashboard.php");
+    header("Location: /pages/dashboard.php");
     exit();
 } else {
-    echo "Usuário ou senha inválidos!";
+    // Redireciona de volta para a página de login com erro
+    header("Location: /pages/login.php?erro=1");
+    exit();
 }
 ?>
